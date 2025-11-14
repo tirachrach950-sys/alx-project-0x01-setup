@@ -29,6 +29,7 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
             Add Post
           </button>
         </div>
+
         <div className="grid grid-cols-3 gap-4">
           {allPosts.map((post, key) => (
             <PostCard key={key} {...post} />
@@ -43,7 +44,7 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   );
 };
 
-// ✅ Fonction pour récupérer les posts depuis l'API
+// ✅ Récupération des posts depuis l'API
 export async function getStaticProps() {
   const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // ✅ URL requise
   const posts: PostProps[] = await response.json();
