@@ -1,18 +1,15 @@
+import PostCard from "@/components/common/PostCard";
+import PostModal from "@/components/common/PostModal";
 import Header from "@/components/layout/Header";
-import PostCard from "@/components/common/PostCard"; // ✅ Import exact requis
-import { PostProps } from "@/interfaces";            // ✅ Import exact requis
+import { PostData, PostProps } from "@/interfaces";
 import { useState } from "react";
 
-interface PostsPageProps {
-  posts: PostProps[];
-}
-
-const Posts: React.FC<PostsPageProps> = ({ posts }) => {
+const Posts: React.FC<{ posts: PostProps[] }> = ({ posts }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [allPosts, setAllPosts] = useState<PostProps[]>(posts);
+  const [post, setPost] = useState<PostData | null>(null);
 
-  const handleAddPost = (newPost: PostProps) => {
-    setAllPosts([...allPosts, { ...newPost, id: allPosts.length + 1 }]);
+  const handleAddPost = (newPost: PostData) => {
+    setPost({ ...newPost, id: posts.length + 1 });
   };
 
   return (
@@ -22,22 +19,36 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
         <div className="flex justify-between mb-4">
           <h1 className="text-2xl font-semibold">Post Content</h1>
           <button
-            className="bg-blue-700 px-4 py-2 rounded-full text-white"
             onClick={() => setModalOpen(true)}
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
           >
             Add Post
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          {allPosts.map((post, key) => (
-            <PostCard key={key} {...post} />
+        <div className="grid grid-cols-3 gap-2">
+          {posts.map(({ title, body, userId, id }: PostProps, key: number) => (
+            <PostCard key={key} title={title} body={body} userId={userId} id={id} />
           ))}
         </div>
       </main>
 
-      {/* Modal pour ajouter un post */}
       {isModalOpen && (
-        <PostModal
-          onClose={() => setModalOpen(false)}
-          onSubmit={(post: PostProp
+        <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost} />
+      )}
+    </div>
+  );
+};
+
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts: PostProps[] = await response.json();
+
+  return {
+    props: {
+      posts,
+    },
+  };
+}
+
+export default Posts;
