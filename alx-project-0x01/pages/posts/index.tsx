@@ -37,4 +37,18 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
       </main>
 
       {isModalOpen && (
-        <PostModa
+        <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost} />
+      )}
+    </div>
+  );
+};
+
+// ✅ Fonction pour récupérer les posts depuis l'API
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // ✅ URL requise
+  const posts: PostProps[] = await response.json();
+
+  return { props: { posts } };
+}
+
+export default Posts;
