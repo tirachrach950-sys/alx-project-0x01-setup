@@ -1,7 +1,7 @@
 import Header from "@/components/layout/Header";
 import PostCard from "@/components/common/PostCard";
 import PostModal from "@/components/common/PostModal";
-import { PostProps, PostData } from "@/interfaces"; // <-- IMPORTANT
+import { PostProps, PostData } from "@/interfaces"; // ✅ Import nécessaire
 import { useState } from "react";
 
 interface PostsPageProps {
@@ -22,7 +22,12 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
       <main className="p-4">
         <div className="flex justify-between mb-4">
           <h1 className="text-2xl font-semibold">Post Content</h1>
-          <button className="bg-blue-700 px-4 py-2 rounded-full text-white" onClick={() => setModalOpen(true)}>Add Post</button>
+          <button
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+            onClick={() => setModalOpen(true)}
+          >
+            Add Post
+          </button>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {allPosts.map((post, key) => (
@@ -31,4 +36,5 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
         </div>
       </main>
 
-      {isModalOpen && <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost}
+      {isModalOpen && (
+        <PostModa
