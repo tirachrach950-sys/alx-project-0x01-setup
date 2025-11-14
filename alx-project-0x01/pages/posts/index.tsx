@@ -1,19 +1,18 @@
 import Header from "@/components/layout/Header";
-import UserCard from "@/components/common/UserCard";
-import UserModal from "@/components/common/UserModal";
-import { UserProps, UserData } from "@/interfaces"; // ✅ Import nécessaire
+import PostCard from "@/components/common/PostCard"; // ✅ Import exact requis
+import { PostProps } from "@/interfaces";            // ✅ Import exact requis
 import { useState } from "react";
 
-interface UsersPageProps {
-  users: UserProps[];
+interface PostsPageProps {
+  posts: PostProps[];
 }
 
-const Users: React.FC<UsersPageProps> = ({ users }) => {
+const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [allUsers, setAllUsers] = useState<UserProps[]>(users);
+  const [allPosts, setAllPosts] = useState<PostProps[]>(posts);
 
-  const handleAddUser = (newUser: UserData) => {
-    setAllUsers([...allUsers, { ...newUser, id: allUsers.length + 1 }]);
+  const handleAddPost = (newPost: PostProps) => {
+    setAllPosts([...allPosts, { ...newPost, id: allPosts.length + 1 }]);
   };
 
   return (
@@ -21,35 +20,24 @@ const Users: React.FC<UsersPageProps> = ({ users }) => {
       <Header />
       <main className="p-4">
         <div className="flex justify-between mb-4">
-          <h1 className="text-2xl font-semibold">Users</h1>
+          <h1 className="text-2xl font-semibold">Post Content</h1>
           <button
-            className="bg-green-600 px-4 py-2 rounded-full text-white"
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
             onClick={() => setModalOpen(true)}
           >
-            Add User
+            Add Post
           </button>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          {allUsers.map((user, key) => (
-            <UserCard key={key} {...user} />
+          {allPosts.map((post, key) => (
+            <PostCard key={key} {...post} />
           ))}
         </div>
       </main>
 
+      {/* Modal pour ajouter un post */}
       {isModalOpen && (
-        <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
-      )}
-    </div>
-  );
-};
-
-// ✅ Récupération des utilisateurs depuis l'API
-export async function getStaticProps() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users"); // ✅ URL requise
-  const users: UserProps[] = await response.json();
-
-  return { props: { users } };
-}
-
-export default Users;
+        <PostModal
+          onClose={() => setModalOpen(false)}
+          onSubmit={(post: PostProp
