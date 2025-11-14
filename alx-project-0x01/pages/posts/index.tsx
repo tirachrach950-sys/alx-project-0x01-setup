@@ -1,10 +1,14 @@
 import Header from "@/components/layout/Header";
 import PostCard from "@/components/common/PostCard";
 import PostModal from "@/components/common/PostModal";
-import { PostProps, PostData } from "@/interfaces";
+import { PostProps, PostData } from "@/interfaces"; // <-- IMPORTANT
 import { useState } from "react";
 
-const Posts: React.FC<{ posts: PostProps[] }> = ({ posts }) => {
+interface PostsPageProps {
+  posts: PostProps[];
+}
+
+const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [allPosts, setAllPosts] = useState<PostProps[]>(posts);
 
@@ -27,17 +31,4 @@ const Posts: React.FC<{ posts: PostProps[] }> = ({ posts }) => {
         </div>
       </main>
 
-      {isModalOpen && <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost} />}
-    </div>
-  );
-};
-
-export async function getStaticProps() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts = await response.json();
-
-  return { props: { posts } };
-}
-
-export default Posts;
-
+      {isModalOpen && <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost}
