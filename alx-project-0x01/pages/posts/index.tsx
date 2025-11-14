@@ -1,19 +1,19 @@
 import Header from "@/components/layout/Header";
-import PostCard from "@/components/common/PostCard";
-import PostModal from "@/components/common/PostModal";
-import { PostProps, PostData } from "@/interfaces"; // ✅ Import nécessaire
+import UserCard from "@/components/common/UserCard";
+import UserModal from "@/components/common/UserModal";
+import { UserProps, UserData } from "@/interfaces"; // ✅ Import nécessaire
 import { useState } from "react";
 
-interface PostsPageProps {
-  posts: PostProps[];
+interface UsersPageProps {
+  users: UserProps[];
 }
 
-const Posts: React.FC<PostsPageProps> = ({ posts }) => {
+const Users: React.FC<UsersPageProps> = ({ users }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [allPosts, setAllPosts] = useState<PostProps[]>(posts);
+  const [allUsers, setAllUsers] = useState<UserProps[]>(users);
 
-  const handleAddPost = (newPost: PostData) => {
-    setAllPosts([...allPosts, { ...newPost, id: allPosts.length + 1 }]);
+  const handleAddUser = (newUser: UserData) => {
+    setAllUsers([...allUsers, { ...newUser, id: allUsers.length + 1 }]);
   };
 
   return (
@@ -21,35 +21,35 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
       <Header />
       <main className="p-4">
         <div className="flex justify-between mb-4">
-          <h1 className="text-2xl font-semibold">Post Content</h1>
+          <h1 className="text-2xl font-semibold">Users</h1>
           <button
-            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+            className="bg-green-600 px-4 py-2 rounded-full text-white"
             onClick={() => setModalOpen(true)}
           >
-            Add Post
+            Add User
           </button>
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          {allPosts.map((post, key) => (
-            <PostCard key={key} {...post} />
+          {allUsers.map((user, key) => (
+            <UserCard key={key} {...user} />
           ))}
         </div>
       </main>
 
       {isModalOpen && (
-        <PostModal onClose={() => setModalOpen(false)} onSubmit={handleAddPost} />
+        <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
       )}
     </div>
   );
 };
 
-// ✅ Récupération des posts depuis l'API
+// ✅ Récupération des utilisateurs depuis l'API
 export async function getStaticProps() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/posts"); // ✅ URL requise
-  const posts: PostProps[] = await response.json();
+  const response = await fetch("https://jsonplaceholder.typicode.com/users"); // ✅ URL requise
+  const users: UserProps[] = await response.json();
 
-  return { props: { posts } };
+  return { props: { users } };
 }
 
-export default Posts;
+export default Users;
